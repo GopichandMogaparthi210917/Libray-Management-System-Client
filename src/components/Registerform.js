@@ -1,19 +1,21 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
+import fetchData from '../utils/fetchData';
 
 const RegisterForm = () => {
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/auth/register', { username, email, password });
-      console.log(response.data);
+      await fetchData('/auth/register', 'POST', { username, email, password });
+      history.push('/login');
     } catch (error) {
-      console.error(error.response.data);
+      console.error(error);
     }
   };
 

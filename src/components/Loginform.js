@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
-import axios from 'axios';
+import { useHistory } from 'react-router-dom';
 import { Form, Button } from 'react-bootstrap';
+import fetchData from '../utils/fetchData';
 
 const LoginForm = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
+  const history = useHistory();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const response = await axios.post('/auth/login', { email, password });
-      console.log(response.data);
+      const data = await fetchData('/auth/login', 'POST', { email, password });
+      localStorage.setItem('token', data.token);
+      history.push('/profile');
     } catch (error) {
-      console.error(error.response.data);
+      console.error(error);
     }
   };
 
